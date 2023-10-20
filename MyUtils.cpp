@@ -1,9 +1,8 @@
 #include "MyUtils.h"
+#include <iostream>
+#include <tuple>
 
 namespace MyUtils {
-
-    template<typename KeyType, typename ValueType>
-    KeyValue<KeyType, ValueType>::KeyValue() = default;
 
     template<typename KeyType, typename ValueType>
     KeyValue<KeyType, ValueType>::KeyValue(const KeyType &k, const ValueType &v)
@@ -18,20 +17,20 @@ namespace MyUtils {
 
     template<typename KeyType, typename ValueType>
     bool KeyValue<KeyType, ValueType>::operator!=(const KeyValue<KeyType, ValueType> &oth) const {
-        return *this != oth;
+        return !(*this == oth);
     }
 
     template<typename KeyType, typename ValueType>
     bool KeyValue<KeyType, ValueType>::operator<(const KeyValue<KeyType, ValueType> &oth) const {
-        return key < oth.key;
+        return std::tie(key, value) < std::tie(oth.key, oth.value);
     }
 
     bool isPrime(int num) {
-        if(num <= 1) {
+        if (num <= 1) {
             return false;
         }
-        for(int i = 2; i <= num / 2; ++i) {
-            if(num % i == 0) {
+        for (int i = 2; i * i <= num; ++i) {
+            if (num % i == 0) {
                 return false;
             }
         }
