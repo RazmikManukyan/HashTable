@@ -1,6 +1,7 @@
 #include "HashTable.h"
+#include "MyUtils.h"
 
-int HashTable::hashFunction(int key) {
+int HashTable::hashFunction(int key) const {
     int hash = 0;
     if(key >= 0) {
         hash = key;
@@ -12,8 +13,13 @@ int HashTable::hashFunction(int key) {
 }
 
 HashTable::HashTable(int size)
-    :tableSize(MyUtils::nextPrime(size)), map(tableSize)
+    :tableSize(MyUtils::nextPrime(size))
 {
+    if(size <= 0) {
+        throw std::invalid_argument("Size must be greater than zero");
+    }
+
+    map.resize(tableSize);
 }
 
 void HashTable::insert(int key, int value) {
@@ -45,15 +51,17 @@ void HashTable::remove(int key) {
     int index = hashFunction(key);
     auto& bucket = map[index];
 
-    for(auto it = bucket.begin(); it != bucket.end(); ++it) {
-        if(it->key == key) {
+    for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+        if (it->key == key) {
             bucket.erase(it);
-            return;
+            return; // Key found and removed, exit the function
         }
     }
 }
 
-
+int HashTable::GetSize() const {
+    return tableSize;
+}
 
 
 
